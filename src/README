@@ -1,0 +1,25 @@
+# Tema2
+
+## Worker-ii de comenzi:
+
+Thread-urile care se ocupa cu procesarea comenzilor citesc din fisierul de orders comenzi
+si parseaza fiecare linie separand id-ul comenzii de numarul de produse ce fac parte din acea comanda.
+Pentru fiecare produs se creaza un worker pentru a cauta un anumit produs din acea comanda in
+fisierul de produse (cautarea se face in functie de index-ul produsului pe care il cautam la un
+anumit moment de timp). Se da submit in threadPool-ul specific worker-ilor de produse pe masura ce
+se creaza un nou worker. Se foloseste un semafor pentru a ne asigura ca scrierea in fisierul de output
+specific comenzilor se va realiza doar atunci cand toate thread-urile de nivel 2 (cele pentru produse)
+se termina (au fost gasite toate produsele din comanda respectiva). Cand toate produsele din comanda au
+fost gasite se da decrement la variabila ordersInteger pentru a semnala ca am terminat de procesat o comanda,
+iar in momentul in care valoarea acestei variabile ajunge sa fie 0 inchidem threadPool-ul specific comenzilor.
+
+
+
+## Worker-ii de produse:
+
+Thread-urile care se ocupa de procesarea produselor cauta un anumit produs in fisierul de produse.
+La gasirea produsului cautat se scrie in fisierul de output specific produselor si se face loc in
+threadPool-ul specific produselor pentru un alt worker. In momentul in care se gaseste produsul cautat se da release
+la semafor pentru a semnala thread-urilor de nivel 1 (cele pentru comenzi) ca s-a mai gasit un produs.
+Cand un produs s-a gasit in fisierul de produse se da decrement la productsInteger. In momentul in care valoarea acestei
+variabile ajunge sa fie 0 inchidem threadPool-ul specific produselor. 
